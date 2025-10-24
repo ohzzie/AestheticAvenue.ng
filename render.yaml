@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: aesthetic-avenue
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: >-
+      bash -lc 'python - <<PY
+      from app import init_db
+      try:
+          init_db()
+      except Exception:
+          pass
+      PY
+      && gunicorn app:app --workers 2 --timeout 120'
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        value: change-me
+      - key: DB_PATH
+        value: /var/data/store.db
+    disks:
+      - name: uploads
+        mountPath: /opt/render/project/src/uploads
+        sizeGB: 1
+      - name: db
+        mountPath: /var/data
+        sizeGB: 1

@@ -12,7 +12,8 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", os.urandom(24))
-DB_PATH = os.path.join(os.path.dirname(__file__), "store.db")
+# Allow overriding DB file location via environment (e.g., Render disk)
+DB_PATH = os.environ.get("DB_PATH") or os.path.join(os.path.dirname(__file__), "store.db")
 
 
 # -----------------------------
