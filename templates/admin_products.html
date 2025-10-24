@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Products</h1>
+<p><a class="btn btn-outline" href="{{ url_for('admin_orders') }}">Go to Orders</a></p>
+<p>
+  <a class="btn" href="{{ url_for('admin_product_new') }}">Add product</a>
+</p>
+
+<div class="card" style="margin:1rem 0; padding:1rem; border:1px solid #eee;">
+  <h3 style="margin-top:0;">Bulk import via CSV</h3>
+  <form method="post" action="{{ url_for('admin_products_import') }}" enctype="multipart/form-data">
+    {{ csrf_token()|safe }}
+    <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
+      <input type="file" name="file" accept=".csv" required>
+      <button class="btn" type="submit">Import CSV</button>
+      <a class="btn btn-outline" href="{{ url_for('admin_products_template_csv') }}">Download CSV template</a>
+    </div>
+    <p class="small" style="margin:.5rem 0 0 0;">Columns: title, description, price, image_urls, tags</p>
+  </form>
+  
+</div>
+<table>
+  <thead><tr><th>Title</th><th>Price</th><th>Stock</th><th>Tags</th><th>Created</th><th></th></tr></thead>
+  <tbody>
+  {% for p in products %}
+    <tr>
+      <td><a href="{{ url_for('product', slug=p['slug']) }}" target="_blank">{{ p['title'] }}</a></td>
+      <td>{{ currency_symbol }} {{ format_price(p['price_cents']) }}</td>
+      <td>
+        {% if p['track_inventory'] %}
+          {{ p['stock_qty'] }}
+        {% else %}
+          —
+        {% endif %}
+      </td>
+      <td>{{ p['tags'] }}</td>
+      <td class="small">{{ p['created_at'] }}</td>
+      <td>
+        <a class="btn btn-outline" href="{{ url_for('admin_product_edit', pid=p['id']) }}">Edit</a>
+        <form method="post" action="{{ url_for('admin_product_delete', pid=p['id']) }}" style="display:inline;">
+          {{ csrf_token()|safe }}
+          <button class="btn btn-outline" type="submit" onclick="return confirm('Delete this product?')">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="5">No products yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

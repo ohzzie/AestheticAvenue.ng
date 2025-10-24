@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero">
+  <div class="hero-content">
+    <h1>Pretty Meets Practical</h1>
+    <p class="hero-subtitle">Minimal lifestyle essentials.</p>
+    <div class="hero-buttons">
+      <a href="{{ url_for('about') }}" class="btn btn-primary">About Us</a>
+      <a href="{{ url_for('shop') }}" class="btn btn-outline">Shop Now</a>
+    </div>
+  </div>
+</div>
+
+<div class="products-grid">
+  {% for p in products %}
+    {% include "product_card.html" %}
+  {% endfor %}
+</div>
+{% endblock %}

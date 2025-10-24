@@ -1,0 +1,156 @@
+﻿{% extends "base.html" %}
+
+{% block jsonld %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{{ p.title|e }}",
+  "image": [{% for img in p.image_urls.split(',') %}{% if loop.index0>0 %}, {% endif %}"{{ img|trim }}"{% endfor %}],
+  "description": {{ (p.description|striptags|replace('\n',' ')|replace('  ',' ') )|tojson }},
+  "brand": {"@type":"Brand","name":"AestheticAvenue.ng"},
+  "url": "{{ request.base_url }}",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "NGN",
+    "price": "{{ (p.price_cents/100)|round(2) }}",
+    "availability": "{{ 'https://schema.org/InStock' if (not p['track_inventory']) or (p['stock_qty']|int > 0) else 'https://schema.org/OutOfStock' }}",
+    "url": "{{ request.base_url }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+  <div class="product-media" data-product-images="{{ p.image_urls }}">
+    {% set images = p.image_urls.split(',') %}
+    <div class="product-image">
+      <img src="{{ images[0] | trim }}" alt="{{ p.title }}">
+    </div>
+    {% if images|length > 1 %}
+    <div class="product-thumbnails">
+      {% for img in images %}
+      <img src="{{ img|trim }}" alt="{{ p.title }} - view {{ loop.index }}" class="thumb" loading="lazy" decoding="async">
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="product-info">
+    <h1>{{ p.title }}</h1>
+    <div class="price">{{ currency_symbol }}{{ format_price(p.price_cents) }}</div>
+    
+    <form method="post" action="{{ url_for('cart') }}" class="add-to-cart">
+      {{ csrf_token() | safe }}
+      <input type="hidden" name="action" value="add">
+      <input type="hidden" name="product_id" value="{{ p.id }}">
+      
+      {% if variants %}
+      <div class="variants">
+        <label for="variant">Options:</label>
+        <select name="variant_id" id="variant" class="styled-select" required>
+          <option value="">Select an option</option>
+          {% for v in variants %}
+          <option value="{{ v.id }}" 
+            data-price="{{ v.price_cents or p.price_cents }}"
+            data-images="{{ v.image_urls or '' }}" data-image="{{ (v.image_urls.split(',')[0] | trim) if v.image_urls else '' }}"
+            data-stock="{{ v.stock_qty if v.track_inventory else 'âˆž' }}">
+            {{ v.name }}
+            {% if v.price_cents %}({{ currency_symbol }}{{ format_price(v.price_cents) }}){% endif %}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+
+      <div class="quantity">
+        <label for="quantity">Quantity:</label>
+        <select name="quantity" id="quantity" class="styled-select">
+          {% for i in range(1, 11) %}
+            <option value="{{ i }}">{{ i }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Add to Cart</button>
+    </form>
+
+    <div class="description">
+      {{ p.description | safe }}
+    </div>
+</div>
+</div>
+<script>
+  (function() {
+    const media = document.querySelector('.product-media');
+    const mainImg = document.querySelector('.product-image img');
+    const thumbsWrap = document.querySelector('.product-thumbnails');
+    const variantSelect = document.getElementById('variant');
+    if (!media || !mainImg || !variantSelect) return;
+
+    const parseList = (csv) => (csv || '').split(',').map(s => s.trim()).filter(Boolean);
+    const defaultImages = parseList(media.dataset.productImages || '');
+
+    function renderThumbnails(images) {
+      if (!thumbsWrap) return;
+      thumbsWrap.innerHTML = '';
+      images.forEach((src, i) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = (mainImg.alt || 'variant') + ' - view ' + (i+1);
+        img.className = 'thumb';
+        img.loading = 'lazy';
+        img.addEventListener('click', () => { mainImg.src = src; });
+        thumbsWrap.appendChild(img);
+      });
+    }
+
+    function updateMediaFromVariant() {
+      const opt = variantSelect.options[variantSelect.selectedIndex];
+      if (!opt) return;
+      const images = parseList(opt.dataset.images || opt.dataset.image || '');
+      if (images.length) {
+        mainImg.src = images[0];
+        renderThumbnails(images);
+      } else if (defaultImages.length) {
+        mainImg.src = defaultImages[0];
+        renderThumbnails(defaultImages);
+      }
+    }
+
+    // Disable out-of-stock options and annotate labels
+    Array.from(variantSelect.options).forEach(o => {
+      if (!o.value) return; // skip placeholder
+      const instock = o.dataset.instock;
+      if (instock === '0') {
+        o.disabled = true;
+        if (!/Out of stock/i.test(o.text)) o.text += ' (Out of stock)';
+      }
+    });
+
+    function formatNaira(cents) {
+      const n = (Number(cents||0) / 100).toFixed(2);
+      return '₦' + Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function updatePriceFromVariant() {
+      const priceEl = document.querySelector('.product-info .price');
+      if (!priceEl) return;
+      const opt = variantSelect.options[variantSelect.selectedIndex];
+      if (!opt) return;
+      const priceCents = parseInt(opt.dataset.price || '{{ p.price_cents }}', 10);
+      if (!isNaN(priceCents)) priceEl.textContent = formatNaira(priceCents);
+    }
+
+    function onVariantChange() {
+      updateMediaFromVariant();
+      updatePriceFromVariant();
+    }
+
+    variantSelect.addEventListener('change', onVariantChange);
+    // Initialize image if a variant is already selected
+    if (variantSelect.value) { onVariantChange(); }
+  })();
+</script>
+{% endblock %}

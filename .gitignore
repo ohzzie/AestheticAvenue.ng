@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+
+# Env/Secrets
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# App data to keep out of repo
+uploads/receipts/
+store.db
+

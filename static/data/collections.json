@@ -1,0 +1,93 @@
+[
+  {
+    "id": "home-essentials",
+    "slug": "home-essentials",
+    "title": "Home Essentials",
+    "description": "Minimal pieces for a tidy, cozy space.",
+    "image": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200&auto=format&fit=crop",
+    "itemCount": 24,
+    "tags": ["home", "minimal", "new"]
+  },
+  {
+    "id": "desk-upgrade",
+    "slug": "desk-upgrade",
+    "title": "Desk Upgrade",
+    "description": "Declutter with stands, trays and pen pots.",
+    "image": "https://images.unsplash.com/photo-1487014679447-9f8336841d58?q=80&w=1200&auto=format&fit=crop",
+    "itemCount": 15,
+    "tags": ["office", "bestseller"]
+  },
+  {
+    "id": "self-care",
+    "slug": "self-care",
+    "title": "Self Care",
+    "description": "Quiet rituals and soft textures.",
+    "image": "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop",
+    "itemCount": 18,
+    "tags": ["wellness", "gift"]
+  },
+  {
+    "id": "pastel-pop",
+    "slug": "pastel-pop",
+    "title": "Pastel Pop",
+    "description": "Cheerful hues that still stay calm.",
+    "image": "https://images.unsplash.com/photo-1512203492609-8f4337e39b9a?q=80&w=1200&auto=format&fit=crop",
+    "itemCount": 12,
+    "tags": ["color", "new"]
+  },
+  {
+    "id": "kitchen-minis",
+    "slug": "kitchen-minis",
+    "title": "Kitchen Minis",
+    "description": "Countertop savers and organizers.",
+    "image": "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?q=80&w=1200&auto=format&fit=crop",
+    "itemCount": 20,
+    "tags": ["kitchen", "bestseller"]
+  },
+  {
+    "id": "bath-refresh",
+    "slug": "bath-refresh",
+    "title": "Bath Refresh",
+    "description": "Warm tones and airy storage.",
+    "image": "https://images.unsplash.com/photo-1582582494700-66f244a40f2b?q=80&w=1200&auto=format&fit=crop",
+    "itemCount": 9,
+    "tags": ["bath", "wellness"]
+  },
+  {
+    "id": "night-stand",
+    "slug": "night-stand",
+    "title": "Night Stand",
+    "description": "Calm corners for better sleep.",
+    "image": "https://images.unsplash.com/photo-1505692794403-34d4982e4d0c?q=80&w=1200&auto=format&fit=crop",
+    "itemCount": 10,
+    "tags": ["bedroom"]
+  },
+  {
+    "id": "plant-shelfie",
+    "slug": "plant-shelfie",
+    "title": "Plant Shelfie",
+    "description": "Green friends meet tidy shelves.",
+    "image": "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1200&auto=format&fit=crop",
+    "itemCount": 14,
+    "tags": ["decor", "green"]
+  },
+  {
+    "id": "giftable-picks",
+    "slug": "giftable-picks",
+    "title": "Giftable Picks",
+    "description": "Small delights that feel big.",
+    "image": "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop",
+    "itemCount": 22,
+    "tags": ["gift", "bestseller"]
+  },
+  {
+    "id": "entryway-edit",
+    "slug": "entryway-edit",
+    "title": "Entryway Edit",
+    "description": "Hooks, trays, and a warm welcome.",
+    "image": "https://images.unsplash.com/photo-1493666438817-866a91353ca9?q=80&w=1200&auto=format&fit=crop",
+    "itemCount": 8,
+    "tags": ["home", "decor"]
+  }
+]
+

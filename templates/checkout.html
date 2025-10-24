@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Checkout</h1>
+
+<div class="card" style="padding:1rem; border:1px solid #eee; margin-bottom:1rem; background:#fff;">
+  <h3 style="margin:.2rem 0 0.5rem 0;">Bank Transfer Details</h3>
+  <p class="small" style="margin:.25rem 0;">Kindly make a transfer to:</p>
+  <p style="margin:.25rem 0;">
+    <strong>Name:</strong> Alalade Ifeoluwa Lovelyn<br>
+    <strong>Bank:</strong> OPAY<br>
+    <strong>Account Number:</strong> 08020685342
+  </p>
+  <p class="small" style="margin:.5rem 0 0 0; color:#7a3e64; font-weight:600;">It is compulsory to upload a picture of your transfer receipt to proceed.</p>
+  <p class="small" style="margin:.25rem 0;">We will verify your payment and confirm your order.</p>
+  <hr>
+  <p class="small" style="margin:0;">Order total: {{ currency_symbol }} {{ format_price(total_cents) }}</p>
+  
+</div>
+<table>
+  <thead><tr><th>Item</th><th>Qty</th><th>Total</th></tr></thead>
+  <tbody>
+  {% for line in cart_items %}
+    <tr>
+      <td>
+        {{ line.product['title'] }}
+        {% if line.variant %}<br><span class="small">Variant: {{ line.variant['name'] }}</span>{% endif %}
+      </td>
+      <td>{{ line.quantity }}</td>
+      <td>{{ currency_symbol }} {{ format_price(line.line_total) }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<form method="post" enctype="multipart/form-data">
+  {{ csrf_token()|safe }}
+  <div class="form-grid">
+    <div class="form-row">
+      <label for="name">Full name</label>
+      <input id="name" name="name" required>
+    </div>
+    <div class="form-row">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required>
+    </div>
+  </div>
+  <div class="form-grid">
+    <div class="form-row">
+      <label for="phone">Phone</label>
+      <input id="phone" name="phone" required>
+    </div>
+    <div class="form-row">
+      <label for="address">Address</label>
+      <input id="address" name="address" required>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <label for="receipt">Upload transfer receipt (image)</label>
+    <input id="receipt" name="receipt" type="file" accept="image/*" required>
+  </div>
+
+  <button class="btn" type="submit">Place order</button>
+</form>
+{% endblock %}

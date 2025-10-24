@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Orders</h1>
+<p><a class="btn btn-outline" href="{{ url_for('admin_products') }}">Go to Products</a></p>
+
+{% if not detail %}
+  <p>
+    <a class="btn btn-outline" href="{{ url_for('admin_orders', status='new') }}">New</a>
+    <a class="btn btn-outline" href="{{ url_for('admin_orders', status='payment_confirmed') }}">Payment Confirmed</a>
+    <a class="btn btn-outline" href="{{ url_for('admin_orders', status='completed') }}">Completed</a>
+    <a class="btn btn-outline" href="{{ url_for('admin_orders', status='all') }}">All</a>
+    <a class="btn" href="{{ url_for('admin_orders_export', status=status) }}">Export CSV</a>
+    <span class="small">Viewing: {{ status }}</span>
+  </p>
+  <table>
+    <thead><tr><th>Order #</th><th>Customer</th><th>Status</th><th>Total</th><th>Created</th><th></th></tr></thead>
+    <tbody>
+    {% for o in orders %}
+      <tr>
+        <td>{{ o['order_number'] }}</td>
+        <td>{{ o['customer_name'] }}<br><span class="small">{{ o['email'] }}</span></td>
+        <td>{{ o['status'] }}</td>
+        <td>{{ currency_symbol }} {{ format_price(o['total_cents']) }}</td>
+        <td class="small">{{ o['created_at'] }}</td>
+        <td><a class="btn btn-outline" href="{{ url_for('admin_order_detail', order_id=o['id']) }}">View</a></td>
+      </tr>
+    {% else %}
+      <tr><td colspan="6">No orders.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p><a class="btn btn-outline" href="{{ url_for('admin_orders') }}">← Back to orders</a></p>
+  <h2>Order {{ order['order_number'] }}</h2>
+  {% if computed_total is defined %}
+    <p><strong>Total:</strong> {{ currency_symbol }} {{ format_price(computed_total) }}</p>
+  {% endif %}
+  <p class="small">{{ order['created_at'] }} — {{ order['status'] }}</p>
+  <h3>Customer</h3>
+  <p>
+    {{ order['customer_name'] }}<br>
+    {{ order['email'] }}<br>
+    {{ order['phone'] }}<br>
+    {{ order['address'] }}
+  </p>
+  {% if order['receipt_path'] %}
+  <h3>Payment Receipt</h3>
+  <p class="small">
+    <a class="btn btn-outline" href="{{ url_for('admin_receipt', filename=order['receipt_path']) }}" target="_blank">View uploaded receipt</a>
+  </p>
+  {% endif %}
+  <h3>Items</h3>
+  <table>
+    <thead><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
+    <tbody>
+      {% set total = 0 %}
+      {% for i in items %}
+        {% set lt = i['price_cents'] * i['quantity'] %}
+        {% set total = total + lt %}
+        <tr>
+          <td>{{ i['title'] }}</td>
+          <td>{{ i['quantity'] }}</td>
+          <td>{{ currency_symbol }} {{ format_price(i['price_cents']) }}</td>
+          <td>{{ currency_symbol }} {{ format_price(lt) }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr><th colspan="3" style="text-align:right;">Total</th><th>{{ currency_symbol }} {{ format_price(total) }}</th></tr>
+    </tfoot>
+  </table>
+  {% if order['status'] == 'new' %}
+    <form method="post" action="{{ url_for('admin_order_confirm_payment', order_id=order['id']) }}">
+      {{ csrf_token()|safe }}
+      <button class="btn" type="submit">Mark payment confirmed</button>
+    </form>
+  {% elif order['status'] == 'payment_confirmed' %}
+    <form method="post" action="{{ url_for('admin_order_complete', order_id=order['id']) }}">
+      {{ csrf_token()|safe }}
+      <button class="btn" type="submit">Mark completed</button>
+    </form>
+  {% else %}
+    <p class="small">Completed at: {{ order['completed_at'] }}</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

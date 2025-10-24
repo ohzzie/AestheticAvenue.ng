@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block jsonld %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Collections | Aesthetic Avenue",
+  "description": "Browse curated product collections with filters and sorting.",
+  "url": "{{ request.base_url }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+  <header class="hero" role="banner">
+    <div class="hero-content">
+      <h1 id="collections-heading">Collections</h1>
+      <p class="hero-subtitle">Discover curated sets. Filter, sort and explore.</p>
+    </div>
+  </header>
+
+  <section class="filters" aria-labelledby="filters-title">
+    <h2 id="filters-title" class="visually-hidden">Filter and sort collections</h2>
+    <form id="filters-form" class="filters-form" role="search" aria-describedby="filters-help">
+      <div class="filters-row">
+        <div class="filters-group">
+          <label for="q">Search</label>
+          <input id="q" name="q" type="search" placeholder="Search collections" inputmode="search" />
+        </div>
+        <div class="filters-group">
+          <label for="sort">Sort</label>
+          <select id="sort" name="sort">
+            <option value="name-asc">Name (A–Z)</option>
+            <option value="name-desc">Name (Z–A)</option>
+            <option value="items-desc">Items (High–Low)</option>
+            <option value="items-asc">Items (Low–High)</option>
+          </select>
+        </div>
+      </div>
+      <div class="filters-chips" id="chip-container" role="group" aria-label="Filter by tag"></div>
+      
+    </form>
+  </section>
+
+  <section aria-labelledby="grid-title" class="collections-section">
+    <div class="sr-status" id="status" role="status" aria-live="polite"></div>
+    <h2 id="grid-title" class="visually-hidden">Collections grid</h2>
+    <ul id="collections-grid" class="collections-grid" role="list"></ul>
+  </section>
+
+  <noscript>
+    <section class="cat-rail" aria-label="Collections quick links">
+      {% for slug, label in tags %}
+        <a class="cat" href="{{ url_for('collections', tag=slug) }}" aria-label="Open {{ label }} collection">
+          <span class="cat-dot">{{ (label|string)[0]|upper }}</span>
+          <span class="cat-label">{{ label }}</span>
+        </a>
+      {% else %}
+        <span class="small">No collections yet.</span>
+      {% endfor %}
+    </section>
+  </noscript>
+
+  <script>window.COLLECTIONS_DATA_URL = "{{ url_for('collections_data') }}";</script>
+  <script defer src="{{ url_for('static', filename='collections.js') }}"></script>
+{% endblock %}

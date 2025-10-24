@@ -1,0 +1,23 @@
+﻿{# Generic product card. Expects `p` or `product` in context. #}
+{% set item = (p if p is defined else (product if product is defined else None)) %}
+{% if item %}
+<article class="card">
+  <a href="{{ url_for('product', slug=item['slug']) }}">
+    <img src="{{ (item['image_urls'] or '').split(',')[0].strip() }}" alt="{{ item['title'] }}" loading="lazy" decoding="async">
+  </a>
+  <div class="card-body">
+    <div>{{ item['title'] }}</div>
+    <div class="price">{{ currency_symbol }} {{ format_price(item['price_cents']) }}</div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+      <form method="post" action="{{ url_for('cart') }}">
+        {{ csrf_token()|safe }}
+        <input type="hidden" name="action" value="add">
+        <input type="hidden" name="product_id" value="{{ item['id'] }}">
+        <input type="hidden" name="quantity" value="1">
+        <button class="btn" type="submit" aria-label="Add {{ item['title'] }} to cart">Add to cart</button>
+      </form>
+      <a class="btn btn-outline" href="{{ url_for('product', slug=item['slug']) }}">View</a>
+    </div>
+  </div>
+</article>
+{% endif %}

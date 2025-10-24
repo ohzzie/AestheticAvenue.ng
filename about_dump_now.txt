@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Hero Section -->
+<div class="hero">
+  <div class="hero-content">
+    <h1>About Aesthetic Avenue</h1>
+    <p class="hero-subtitle">Pretty meets practical — minimal lifestyle essentials.</p>
+    <div class="hero-buttons">
+      <a href="{{ url_for('shop') }}" class="btn btn-primary">Shop Now</a>
+      <a href="{{ url_for('contact') }}" class="btn btn-outline">Contact Us</a>
+    </div>
+  </div>
+</div>
+
+<!-- Our Story and Why Shop With Us -->
+<div class="content-container">
+  <div class="about-section">
+    <article class="card">
+      <div class="card-body">
+        <h2>Our Story</h2>
+        <p>We believe everyday essentials should be both beautiful and functional. Aesthetic Avenue was created to bring a soft, feminine palette and quality-first craftsmanship to the things you carry and use daily.</p>
+        <p>From tumblers to bags and accessories, we keep forms clean, details thoughtful, and materials dependable - so your pieces look good and work hard.</p>
+        <ul class="about-list">
+          <li>Quality-first materials</li>
+          <li>Timeless, feminine palette</li>
+          <li>Thoughtful daily-use details</li>
+        </ul>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-body">
+        <h2>Why Shop With Us</h2>
+        <ul class="feature-list">
+          <li>Fast Lagos delivery and reliable nationwide shipping</li>
+          <li>Secure order flow with receipt confirmation</li>
+          <li>Friendly support on WhatsApp and Instagram</li>
+          <li>New drops and seasonal colorways</li>
+        </ul>
+      </div>
+    </article>
+  </div>
+
+  <!-- Customer Reviews Section -->
+  <h2 class="reviews-title">What Customers Say</h2>
+  <div class="reviews-grid">
+    <article class="review-card">
+      <div class="card-body">
+        <strong class="reviewer-name">Chinonso E.</strong>
+        <p class="review-text">"The color is beautiful and quality is outstanding. I get compliments everywhere."</p>
+        <p class="review-rating">?????</p>
+      </div>
+    </article>
+    <article class="review-card">
+      <div class="card-body">
+        <strong class="reviewer-name">Adaobi N.</strong>
+        <p class="review-text">"The bag fits my style and holds all essentials. Lightweight and chic."</p>
+        <p class="review-rating">?????</p>
+      </div>
+    </article>
+    <article class="review-card">
+      <div class="card-body">
+        <strong class="reviewer-name">Tolu W.</strong>
+        <p class="review-text">"Pastel cap is gorgeous. Great fit and really high quality."</p>
+        <p class="review-rating">?????</p>
+      </div>
+    </article>
+  </div>
+</div>
+
+<style>
+  :root {
+    --primary: #f8d7e3;
+    --accent: #d84a9f;
+    --text: #444;
+    --bg: #fffafc;
+    --btn-bg: #ff66c4;
+    --btn-outline: #f7b7d2;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+  }
+
+  /* Hero Section */\n}') center / cover no-repeat;
+    padding: 3rem 1rem;
+    text-align: center;
+    border-bottom: 2px solid var(--accent);
+  }\n\n\n\n\n\n\n
+
+  /* Content Section */
+  .content-container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+  }
+
+  .about-section {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 2rem;
+  }
+
+  article.card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  article.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  ul li {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+  }
+
+  /* Customer Reviews */
+  .reviews-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+  }
+
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .review-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .review-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .reviewer-name {
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .review-text {
+        <p class="review-rating">?????</p>
+    font-size: 1rem;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {\n\n
+
+    .about-section {
+      grid-template-columns: 1fr;
+    }
+
+    .reviews-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
+

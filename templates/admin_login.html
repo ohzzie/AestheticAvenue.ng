@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Admin login</h1>
+  <form method="post" style="max-width:360px;">
+    {{ csrf_token()|safe }}
+    <div class="form-row">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required>
+    </div>
+    <button class="btn" type="submit">Login</button>
+  </form>
+{% endblock %}

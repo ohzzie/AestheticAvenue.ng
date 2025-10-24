@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ page_title or "aestheticavenue" }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="aestheticavenue — Pretty Meets Practical. Minimal lifestyle essentials.">
+  <meta property="og:title" content="{{ page_title or 'aestheticavenue' }}">
+  <meta property="og:description" content="aestheticavenue — Pretty Meets Practical.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ request.url }}">
+  <link rel="canonical" href="{{ request.base_url }}">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lobster&display=swap" rel="stylesheet">
+  {% block jsonld %}{% endblock %}
+  <style>
+    .hero {
+      background: url("{{ url_for('static', filename='hero.svg') }}") center / cover no-repeat;
+      background-color: #faf7fb;
+      color: #fff;
+      font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      text-align: center;
+    }
+    .hero h1 { font-family: 'Lobster', cursive; }
+    .hero h1, .hero h2, .hero p, .hero a, .hero .btn { color: inherit; }
+
+    .btn {
+      display: inline-flex; align-items:center; justify-content:center; gap:.4rem;
+      padding:.55rem .9rem; border-radius:.6rem; font-weight:600; font-family:'Poppins',system-ui,sans-serif; font-size:.95rem;
+      text-decoration:none; cursor:pointer; border:1px solid transparent; transition: background .15s ease, color .15s ease, border-color .15s ease, transform .06s; user-select:none;
+    }
+    .btn-primary, .btn--primary { background: var(--bubblegum); color:#fff; border-color: var(--bubblegum); }
+    .btn-primary:hover { transform: translateY(-1px); }
+    .btn-outline { background:transparent; color: var(--bubblegum); border-color: var(--bubblegum); }
+    .btn-outline:hover { background: rgba(0,0,0,.04); }
+    .btn.small, .btn--small { padding:.35rem .6rem; font-size:.85rem; }
+    button.btn, input[type="submit"].btn { appearance:none; -webkit-appearance:none; border:0; }
+    .hero .btn-outline { color:#fff; border-color:rgba(255,255,255,0.35); }
+    .hero .btn-outline:hover { background:rgba(255,255,255,0.06); }
+    .btn + .btn { margin-left:.6rem; }
+  </style>
+</head>
+<body>
+{% if session.get('admin_logged_in') %}
+  <div class="aa-admin-toolbar" style="position:sticky;top:0;z-index:1000;background:#FFEEF7;border-bottom:1px solid #f0d7e5;padding:.5rem 0;">
+    <div class="container" style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
+      <strong class="small">Admin:</strong>
+      <a class="btn btn-outline" href="{{ url_for('admin_orders') }}">Orders</a>
+      <a class="btn btn-outline" href="{{ url_for('admin_products') }}">Products</a>
+      <a class="btn" href="{{ url_for('admin_product_new') }}">+ Add product</a>
+      <span class="spacer"></span>
+      <a class="small" href="{{ url_for('admin_logout') }}">Logout</a>
+    </div>
+  </div>
+{% endif %}
+
+<header class="header">
+  <div class="container">
+    <a class="brand" href="{{ url_for('index') }}" style="text-decoration: none; color: inherit;">
+      {% if logo_exists %}<img src="{{ url_for('static', filename='logo.png') }}" alt="Aesthetic Avenue logo">{% endif %}
+      AestheticAvenue.ng
+    </a>
+    <nav class="nav" role="navigation" aria-label="Main">
+      <a href="{{ url_for('shop') }}">Shop</a>
+      <a href="{{ url_for('collections_index') }}">Collections</a>
+      <a href="{{ url_for('about') }}">About</a>
+      <a href="{{ url_for('collections', tag='addons') }}">Add-ons</a>
+      <a href="{{ url_for('faq') }}">FAQ</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
+      <form method="get" action="{{ url_for('search') }}" role="search" aria-label="Search" style="display:inline-flex; gap:.4rem; align-items:center; margin-left:.5rem;">
+        <input type="search" name="q" placeholder="Search products" value="{{ request.args.get('q','') }}" style="padding:.4rem .6rem; border:1px solid #f0d7e5; border-radius:.6rem;">
+        <button class="btn btn-outline" type="submit">Search</button>
+      </form>
+      <a href="{{ url_for('cart') }}">Cart</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for cat, msg in messages %}
+        <div class="alert {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+  <div class="container footer-cols">
+    <div class="small">
+      © {{ 2025 }} Aesthetic Avenue — Pretty Meets Practical.
+    </div>
+    <div class="small" style="text-align:right;">
+      <a href="{{ url_for('shipping') }}">Shipping & Returns</a> ·
+      <a href="{{ url_for('privacy') }}">Privacy</a> ·
+      <a href="{{ url_for('terms') }}">Terms</a> ·
+      
+      
+        · <a href="{{ url_for('admin_orders') }}">Admin</a> · <a href="{{ url_for('admin_logout') }}">Logout</a>
+      
+        · <a href="{{ url_for('admin_login') }}">Admin</a>
+      
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero">
+  <div class="hero-content">
+    <h1>Search Results</h1>
+    <p class="hero-subtitle">Found {{ products|length }} items matching '{{ q }}'</p>
+  </div>
+  </div>
+
+<div class="products-grid">
+  {% if products %}
+    {% for p in products %}
+      {% include "product_card.html" %}
+    {% endfor %}
+  {% else %}
+    <p>No products found matching your search. Try different keywords or <a href="{{ url_for('shop') }}">browse all products</a>.</p>
+  {% endif %}
+</div>
+{% endblock %}

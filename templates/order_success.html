@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Thank you!</h1>
+  <p>Your order <strong>{{ order_number }}</strong> was received. We’ll email you shortly with payment / delivery details.</p>
+  <p><a class="btn btn-outline" href="{{ url_for('shop') }}">Back to shop</a></p>
+{% endblock %}

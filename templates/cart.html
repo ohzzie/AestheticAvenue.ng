@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <div class="hero-content">
+    <h1>Your Cart</h1>
+  </div>
+</div>
+{% if not cart_items %}
+  <p>Cart is empty.</p>
+  <p><a class="btn btn-outline" href="{{ url_for('shop') }}">Continue shopping</a></p>
+{% else %}
+<table aria-label="Cart items">
+  <thead><tr><th>Item</th><th>Qty</th><th>Total</th><th></th></tr></thead>
+  <tbody>
+  {% for line in cart_items %}
+    <tr>
+      <td>
+        <strong>{{ line.product['title'] }}</strong>
+        {% if line.variant %}<br><span class="small">Variant: {{ line.variant['name'] }}</span>{% endif %}<br>
+        <span class="small">{{ currency_symbol }} {{ format_price(line.unit_price) }} each</span>
+      </td>
+      <td>
+        <form method="post" action="{{ url_for('cart') }}" style="display:flex; gap:.4rem; align-items:center;">
+          {{ csrf_token()|safe }}
+          <input type="hidden" name="action" value="update">
+          <input type="hidden" name="product_id" value="{{ line.product['id'] }}">
+          {% if line.variant %}<input type="hidden" name="variant_id" value="{{ line.variant['id'] }}">{% endif %}
+          <input type="number" name="quantity" min="1" value="{{ line.quantity }}" style="width:80px;">
+          <button class="btn btn-outline" type="submit">Update</button>
+        </form>
+      </td>
+      <td>{{ currency_symbol }} {{ format_price(line.line_total) }}</td>
+      <td>
+        <form method="post" action="{{ url_for('cart') }}">
+          {{ csrf_token()|safe }}
+          <input type="hidden" name="action" value="remove">
+          <input type="hidden" name="product_id" value="{{ line.product['id'] }}">
+          {% if line.variant %}<input type="hidden" name="variant_id" value="{{ line.variant['id'] }}">{% endif %}
+          <button class="btn btn-outline" type="submit">Remove</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p style="text-align:right; font-weight:700;">Subtotal: {{ currency_symbol }} {{ format_price(total_cents) }}</p>
+<p style="text-align:right;"><a class="btn" href="{{ url_for('checkout') }}">Checkout</a></p>
+{% endif %}
+{% endblock %}

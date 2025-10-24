@@ -1,0 +1,54 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <div class="hero-content">
+    <h1>Frequently Asked Questions</h1>
+  </div>
+</div>
+
+<div class="card" style="padding:1rem; background:#fff;">
+  <div class="faq-list" style="display:grid; gap:.6rem;">
+    <details class="faq" style="border:1px solid var(--border); border-radius:.8rem; overflow:hidden;">
+      <summary style="cursor:pointer; list-style:none; padding:.8rem 1rem; background:var(--blush); font-weight:600;">How do I place an order?</summary>
+      <div style="padding: .8rem 1rem;">
+        You can order directly on our website or via Instagram/WhatsApp for faster assistance.
+      </div>
+    </details>
+
+    <details class="faq" style="border:1px solid var(--border); border-radius:.8rem; overflow:hidden;">
+      <summary style="cursor:pointer; list-style:none; padding:.8rem 1rem; background:var(--blush); font-weight:600;">Do you allow pickups?</summary>
+      <div style="padding: .8rem 1rem;">
+        Yes! Pickup locations include PHCN Office, Egbeda and Rollace Hotel, Ajao Estate — both in Lagos. Pickups are available after full payment confirmation.
+      </div>
+    </details>
+
+    <details class="faq" style="border:1px solid var(--border); border-radius:.8rem; overflow:hidden;">
+      <summary style="cursor:pointer; list-style:none; padding:.8rem 1rem; background:var(--blush); font-weight:600;">What payment methods do you accept?</summary>
+      <div style="padding: .8rem 1rem;">
+        We accept bank transfers. Kindly upload your transfer receipt at checkout or send it to us on Instagram/WhatsApp for verification.
+      </div>
+    </details>
+
+    <details class="faq" style="border:1px solid var(--border); border-radius:.8rem; overflow:hidden;">
+      <summary style="cursor:pointer; list-style:none; padding:.8rem 1rem; background:var(--blush); font-weight:600;">How long does delivery take?</summary>
+      <div style="padding: .8rem 1rem;">
+        Same-day delivery is available in Lagos. Interstate delivery takes 3–5 working days after shipping.
+      </div>
+    </details>
+
+    <details class="faq" style="border:1px solid var(--border); border-radius:.8rem; overflow:hidden;">
+      <summary style="cursor:pointer; list-style:none; padding:.8rem 1rem; background:var(--blush); font-weight:600;">Do you offer refunds or exchanges?</summary>
+      <div style="padding: .8rem 1rem;">
+        We only issue refunds if an item is unavailable or a wrong product was sent. Limited‑edition items are final sale.
+      </div>
+    </details>
+
+    <details class="faq" style="border:1px solid var(--border); border-radius:.8rem; overflow:hidden;">
+      <summary style="cursor:pointer; list-style:none; padding:.8rem 1rem; background:var(--blush); font-weight:600;">How can I reach you?</summary>
+      <div style="padding: .8rem 1rem;">
+        DM us on <a href="https://instagram.com/aestheticavenue.ng" target="_blank" rel="noopener">@aestheticavenue.ng</a> or message on WhatsApp. We respond within a few hours.
+      </div>
+    </details>
+  </div>
+</div>
+{% endblock %}

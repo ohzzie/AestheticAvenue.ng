@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ â€” AestheticAvenue.ng</title>
+
+  <!-- Font & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/static/favicon.png">
+
+  <style>
+    :root {
+      --primary: #f8d7e3;
+      --accent: #eebad7;
+      --text: #444;
+      --bg: #fffafc;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--primary);
+      padding: 2rem 1rem;
+      text-align: center;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .faq-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .faq-item {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    .faq-question {
+      padding: 1rem 1.2rem;
+      background: var(--primary);
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-size: 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+
+    .faq-question:hover {
+      background: var(--accent);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      background: white;
+      padding: 0 1.2rem;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+
+    .faq-answer p {
+      margin: 1rem 0;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 600px;
+      padding: 1rem 1.2rem;
+    }
+
+    .plus {
+      font-weight: bold;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.active .plus {
+      transform: rotate(45deg);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+      color: #777;
+      border-top: 1px solid #eee;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Frequently Asked Questions</h1>
+    <p>Everything you need to know about shopping with AestheticAvenue.ng ðŸŽ€</p>
+  </header>
+
+  <section class="faq-container">
+    <div class="faq-item">
+      <button class="faq-question">How do I place an order? <span class="plus">+</span></button>
+      <div class="faq-answer">
+        <p>You can order directly on our website or via Instagram/WhatsApp for faster assistance.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Do you allow pickups? <span class="plus">+</span></button>
+      <div class="faq-answer">
+        <p>Yes! Pickup locations include PHCN Office, Egbeda and Rollace Hotel, Ajao Estate â€” both in Lagos. Pickups are available after full payment confirmation.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">What payment methods do you accept? <span class="plus">+</span></button>
+      <div class="faq-answer">
+        <p>We accept bank transfers only. Kindly upload your transfer receipt during checkout or send it to us on Instagram/WhatsApp for verification.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">How long does delivery take? <span class="plus">+</span></button>
+      <div class="faq-answer">
+        <p>Same-day delivery is available in Lagos. Interstate delivery takes 3â€“5 working days after shipping.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">Do you offer refunds or exchanges? <span class="plus">+</span></button>
+      <div class="faq-answer">
+        <p>We only issue refunds if an item is unavailable or a wrong product was sent. Limited-edition items are final sale.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">How can I reach you? <span class="plus">+</span></button>
+      <div class="faq-answer">
+        <p>DM us on <a href="https://instagram.com/aestheticavenue.ng">@aestheticavenue.ng</a> or message us on WhatsApp. We respond within a few hours ðŸ’•</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Â© 2025 AestheticAvenue.ng â€” Pretty Has an Address ðŸ’– | <a href="/terms">View Terms</a></p>
+  </footer>
+
+  <script>
+    document.querySelectorAll(".faq-question").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const faq = btn.parentElement;
+        faq.classList.toggle("active");
+      });
+    });
+  </script>
+</body>
+</html>
