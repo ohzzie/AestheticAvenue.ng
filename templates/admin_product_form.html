@@ -76,6 +76,7 @@
         <td>{{ currency_symbol }} {{ format_price((v['price_cents'] is not none) and v['price_cents'] or p['price_cents']) }}</td>
         <td>{% if v['track_inventory'] %}{{ v['stock_qty'] }}{% else %}—{% endif %}</td>
         <td>
+          <a class="btn btn-outline" href="{{ url_for('admin_variant_edit', pid=p['id'], vid=v['id']) }}" style="display:inline;">Edit</a>
           <form method="post" action="{{ url_for('admin_variant_delete', pid=p['id'], vid=v['id']) }}" style="display:inline;">
             {{ csrf_token()|safe }}
             <button class="btn btn-outline" type="submit" onclick="return confirm('Delete variant?')">Delete</button>

@@ -467,12 +467,82 @@ def admin_products():
 def admin_product_new():
     redir = _admin_required()
     if redir: return redir
+    if request.method == "POST":
+        validate_csrf()
+        title = (request.form.get('title') or '').strip()
+        description = (request.form.get('description') or '').strip()
+        price_raw = (request.form.get('price') or '').replace(',', '').strip()
+        try:
+            price_cents = int(round(float(price_raw) * 100)) if price_raw else 0
+        except Exception:
+            price_cents = 0
+        image_urls = (request.form.get('image_urls') or '').strip()
+        tags = (request.form.get('tags') or '').strip().lower()
+        stock_qty = request.form.get('stock_qty', type=int, default=0)
+        track_inventory = 1 if request.form.get('track_inventory') else 0
+        if not title:
+            flash('Title is required.', 'danger')
+            return render_template("admin_product_form.html", p=None, variants=[], page_title="New Product")
+        now = today_str()
+        slug = slugify(title)
+        conn = get_db(); c = conn.cursor()
+        try:
+            c.execute(
+                """
+                INSERT INTO products (title, slug, description, price_cents, image_urls, tags, stock_qty, track_inventory, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (title, slug, description, price_cents, image_urls, tags, stock_qty, track_inventory, now, now)
+            )
+        except Exception:
+            # Fallback in case of slug collision
+            slug = slugify(f"{title}-{uuid.uuid4().hex[:4]}")
+            c.execute(
+                """
+                INSERT INTO products (title, slug, description, price_cents, image_urls, tags, stock_qty, track_inventory, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (title, slug, description, price_cents, image_urls, tags, stock_qty, track_inventory, now, now)
+            )
+        pid = c.lastrowid
+        conn.commit(); conn.close()
+        flash('Product created.', 'success')
+        return redirect(url_for('admin_product_edit', pid=pid))
     return render_template("admin_product_form.html", p=None, variants=[], page_title="New Product")
 
 @app.route("/admin/products/<int:pid>/edit", methods=["GET", "POST"])
 def admin_product_edit(pid):
     redir = _admin_required()
     if redir: return redir
+    if request.method == "POST":
+        validate_csrf()
+        title = (request.form.get('title') or '').strip()
+        description = (request.form.get('description') or '').strip()
+        price_raw = (request.form.get('price') or '').replace(',', '').strip()
+        try:
+            price_cents = int(round(float(price_raw) * 100)) if price_raw else 0
+        except Exception:
+            price_cents = 0
+        image_urls = (request.form.get('image_urls') or '').strip()
+        tags = (request.form.get('tags') or '').strip().lower()
+        stock_qty = request.form.get('stock_qty', type=int, default=0)
+        track_inventory = 1 if request.form.get('track_inventory') else 0
+        if not title:
+            flash('Title is required.', 'danger')
+        else:
+            now = today_str()
+            conn = get_db(); c = conn.cursor()
+            c.execute(
+                """
+                UPDATE products
+                SET title=?, description=?, price_cents=?, image_urls=?, tags=?, stock_qty=?, track_inventory=?, updated_at=?
+                WHERE id=?
+                """,
+                (title, description, price_cents, image_urls, tags, stock_qty, track_inventory, now, pid)
+            )
+            conn.commit(); conn.close()
+            flash('Product updated.', 'success')
+        return redirect(url_for('admin_product_edit', pid=pid))
     conn = get_db(); c = conn.cursor()
     c.execute("SELECT * FROM products WHERE id=?", (pid,)); p = c.fetchone()
     c.execute("SELECT * FROM product_variants WHERE product_id=? ORDER BY id", (pid,)); variants = c.fetchall(); conn.close()
@@ -587,6 +657,45 @@ def admin_variant_new(pid):
     conn.commit(); conn.close();
     flash('Variant added.', 'success')
     return redirect(url_for('admin_product_edit', pid=pid))
+
+@app.route("/admin/products/<int:pid>/variants/<int:vid>/edit", methods=["GET", "POST"])
+def admin_variant_edit(pid, vid):
+    redir = _admin_required()
+    if redir: return redir
+    conn = get_db(); c = conn.cursor()
+    c.execute("SELECT * FROM product_variants WHERE id=? AND product_id=?", (vid, pid)); v = c.fetchone()
+    if not v:
+        conn.close(); abort(404)
+    if request.method == "POST":
+        validate_csrf()
+        name = (request.form.get('name') or '').strip()
+        price_raw = (request.form.get('price') or '').replace(',', '').strip()
+        price_cents = None
+        if price_raw:
+            try:
+                price_cents = int(round(float(price_raw) * 100))
+            except Exception:
+                price_cents = None
+        stock_qty = request.form.get('stock_qty', type=int, default=0)
+        track_inventory = 1 if request.form.get('track_inventory') else 0
+        image_urls = (request.form.get('image_urls') or '').strip()
+        if not name:
+            conn.close(); flash('Variant name is required.', 'danger'); return redirect(url_for('admin_variant_edit', pid=pid, vid=vid))
+        now = today_str()
+        c.execute(
+            """
+            UPDATE product_variants
+            SET name=?, price_cents=?, stock_qty=?, track_inventory=?, image_urls=?, updated_at=?
+            WHERE id=? AND product_id=?
+            """,
+            (name, price_cents, stock_qty, track_inventory, image_urls, now, vid, pid)
+        )
+        conn.commit(); conn.close()
+        flash('Variant updated.', 'success')
+        return redirect(url_for('admin_product_edit', pid=pid))
+    # GET
+    c.execute("SELECT id, title FROM products WHERE id=?", (pid,)); p = c.fetchone(); conn.close()
+    return render_template("admin_variant_form.html", pid=pid, v=v, p=p, page_title=f"Edit Variant — {p['title'] if p else ''}")
 
 @app.route("/admin/products/<int:pid>/variants/<int:vid>/delete", methods=["POST"])
 def admin_variant_delete(pid, vid):

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Edit Variant{% if p %} for {{ p['title'] }}{% endif %}</h1>
+
+<p>
+  <a class="btn btn-outline" href="{{ url_for('admin_product_edit', pid=pid) }}">Back to product</a>
+</p>
+
+<form method="post">
+  {{ csrf_token()|safe }}
+  <div class="form-grid">
+    <div class="form-row">
+      <label for="name">Color name</label>
+      <input id="name" name="name" value="{{ v['name'] }}" required>
+    </div>
+    <div class="form-row">
+      <label for="price">Variant price (optional)</label>
+      <input id="price" name="price" placeholder="leave blank to use product price" value="{{ (v['price_cents'] is not none) and (v['price_cents']/100) or '' }}">
+    </div>
+    <div class="form-row">
+      <label for="stock_qty">Stock quantity</label>
+      <input id="stock_qty" name="stock_qty" type="number" min="0" value="{{ v['stock_qty'] }}">
+    </div>
+    <div class="form-row" style="display:flex;align-items:center;gap:.5rem;">
+      <input id="track_inventory" name="track_inventory" type="checkbox" {% if v['track_inventory'] %}checked{% endif %}>
+      <label for="track_inventory">Track inventory</label>
+    </div>
+  </div>
+  <div class="form-row">
+    <label for="image_urls">Image URL(s) (optional, comma-separated)</label>
+    <input id="image_urls" name="image_urls" value="{{ v['image_urls'] }}" placeholder="https://...">
+  </div>
+  <button class="btn" type="submit">Update</button>
+  <a class="btn btn-outline" href="{{ url_for('admin_product_edit', pid=pid) }}">Cancel</a>
+</form>
+{% endblock %}
+
