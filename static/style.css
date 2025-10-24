@@ -399,6 +399,32 @@ input[name="csrf_token"] {
 .collection-card__desc { color: var(--charcoal); margin:0; }
 .collection-card__meta { font-size:.9rem; color: var(--mauve); }
 
+/* --- Product image 3:4 aspect, shrink large images (no crop) --- */
+.product-media { display: grid; gap: .75rem; align-content: start; }
+.product-image {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 3 / 4;                  /* enforce 3:4 area */
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  display: grid;
+  place-items: center;                   /* center image inside */
+  overflow: hidden;                      /* hide overflow if any */
+}
+.product-image img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;                           /* keep natural proportions */
+  height: auto;
+  object-fit: contain;                   /* shrink-to-fit, do not crop */
+}
+
+.product-thumbnails { display:grid; grid-auto-flow: column; gap:.5rem; overflow-x:auto; }
+.product-thumbnails .thumb { width:68px; height:68px; object-fit:cover; border:1px solid var(--border); border-radius:8px; background:#fff; cursor:pointer; }
+
 /* Ensure clear focus for all links */
 a:focus-visible { outline: 3px solid var(--bubblegum); outline-offset: 2px; border-radius: 6px; }
 
